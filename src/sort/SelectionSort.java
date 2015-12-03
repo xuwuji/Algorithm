@@ -8,11 +8,14 @@ public class SelectionSort {
 	 */
 	public static int[] sort(int[] data, int n) {
 		for (int i = 0; i < n; i++) {
+			int min = i;
 			for (int j = i + 1; j < n; j++) {
-				if (data[j] <= data[i]) {
-					Util.swap(data, i, j);
+				if (data[j] <= data[min]) {
+					min = j;
 				}
 			}
+			Util.swap(data, i, min);
+
 		}
 		return data;
 	}

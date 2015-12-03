@@ -19,12 +19,14 @@ public class BubbleSort {
 	}
 
 	public static void main(String[] args) {
-		int[] a = new int[] { 1, 2, 4, 12, 4, 6, 2 };
-		a = BubbleSort.sort(a, a.length);
+		int[] a = new int[] { 1, 2, 4, 12, 4, 6, 2, 1, 3, 7743, 2};
+		long start = System.nanoTime();
+		BubbleSort.sort(a, a.length - 1);
+		long elapsedTime = System.nanoTime() - start;
 		for (int i = 0; i < a.length; i++) {
 			System.out.print(a[i] + " ");
 		}
-
+		System.out.println(elapsedTime);
 	}
 
 }
