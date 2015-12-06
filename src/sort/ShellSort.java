@@ -1,5 +1,8 @@
 package sort;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import util.Util;
 
 public class ShellSort {
