@@ -1,8 +1,7 @@
-package structure;
+package sort;
 
 import java.util.Arrays;
 
-import sort.InsertionSort;
 import util.Util;
 
 public class Heap {
