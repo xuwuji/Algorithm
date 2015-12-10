@@ -49,18 +49,14 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 	}
 
-	public void delete(Key key) {
-		Node pointer = root;
+	public Node deleteMin(Node pointer) {
 
-		if (key.compareTo(pointer.key) < 0) {
-
+		if (pointer.left != null) {
+			pointer.left = deleteMin(pointer.left);
+		} else {
+			pointer = pointer.right;
 		}
-
-		if (key == pointer.key) {
-			if (pointer.left == null && pointer.right == null) {
-
-			}
-		}
+		return pointer;
 
 	}
 
@@ -85,10 +81,61 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		return true;
 	}
 
+	public Node findMin(Node pointer) {
+
+		if (pointer.left != null) {
+			pointer.left = findMin(pointer.left);
+		} else {
+			return pointer;
+		}
+		return pointer;
+	}
+
+	public void delete(Key key) {
+		root = deleteHelper(key, root);
+	}
+
+	public Node deleteHelper(Key key, Node pointer) {
+		if (key.compareTo(pointer.key) > 0) {
+			pointer.right = deleteHelper(key, pointer.right);
+		} else if (key.compareTo(pointer.key) < 0) {
+			pointer.left = deleteHelper(key, pointer.left);
+		} else if (key.compareTo(pointer.key) == 0) {
+			if (pointer.left == null && pointer.right == null) {
+				pointer = null;
+			} else if (pointer.left == null) {
+				pointer = pointer.right;
+			} else if (pointer.right == null) {
+				pointer = pointer.left;
+			} else {
+				Node temp = pointer;
+				Node n = pointer.right;
+				while (n.left != null) {
+					n = n.left;
+				}
+				pointer = n;
+				pointer = n;
+				pointer.right = deleteMin(temp.right);
+				pointer.left = temp.left;
+			}
+		}
+		return pointer;
+	}
+
+	public Node deleteMax(Node pointer) {
+
+		if (pointer.right != null) {
+			pointer.right = deleteMax(pointer.right);
+		} else {
+			pointer = pointer.left;
+		}
+		return pointer;
+	}
+
 	public void inOrderTraverse(Node pointer) {
 		if (pointer != null) {
 			inOrderTraverse(pointer.left);
-			System.out.println(pointer.key);
+			System.out.println(pointer.toString());
 			inOrderTraverse(pointer.right);
 		}
 	}
@@ -160,12 +207,19 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		tree.addNode(2, "b");
 		tree.addNode(5, "e");
 		tree.addNode(9, "i");
+		// tree.delete(9, tree.root);
+		tree.delete(3);
+		// tree.root.left.left = tree.root.left.left.right;
+		// tree.deleteMin(tree.root);
+		// tree.deleteMin(tree.root);
 		// tree.inOrderTraverse(tree.root);
 		// tree.PreOrderTraverse(tree.root);
 		// tree.PostOrderTraverse(tree.root);
-		// tree.LevelOrderTraverse(tree.root);
-		tree.ReverseLevelOrderTraverse(tree.root);
-		System.out.println(tree.find(6));
+		tree.LevelOrderTraverse(tree.root);
+
+		// tree.ReverseLevelOrderTraverse(tree.root);
+
+		// System.out.println(tree.find(6));
 	}
 
 }
