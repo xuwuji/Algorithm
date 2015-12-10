@@ -194,6 +194,37 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 	}
 
+	public boolean isBST(Node pointer) {
+
+		if (pointer.left != null) {
+			if (pointer.left.key.compareTo(pointer.key) > 0) {
+				return false;
+			} else {
+				isBST(pointer.left);
+			}
+		}
+		if (pointer.right != null) {
+			if (pointer.right.key.compareTo(pointer.key) < 0) {
+				return false;
+			} else {
+				isBST(pointer.right);
+			}
+		}
+		return true;
+	}
+
+	public int getMaxHeight(Node pointer) {
+		if (pointer == null)
+			return -1;
+		return 1 + Math.max(getMaxHeight(pointer.left), getMaxHeight(pointer.right));
+	}
+
+	public int getMinHeight(Node pointer) {
+		if (pointer == null)
+			return -1;
+		return 1 + Math.min(getMinHeight(pointer.left), getMinHeight(pointer.right));
+	}
+
 	public static void main(String[] args) {
 		BinaryTree<Integer, String> tree = new BinaryTree<Integer, String>();
 		tree.addNode(6, "f");
@@ -216,10 +247,13 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		// tree.PreOrderTraverse(tree.root);
 		// tree.PostOrderTraverse(tree.root);
 		tree.LevelOrderTraverse(tree.root);
-
 		// tree.ReverseLevelOrderTraverse(tree.root);
 
-		// System.out.println(tree.find(6));
+		System.out.println(tree.find(6));
+		System.out.println(tree.root.toString());
+		System.out.println(tree.isBST(tree.root));
+		System.out.println(tree.getMaxHeight(tree.root));
+		System.out.println(tree.getMinHeight(tree.root));
 	}
 
 }
