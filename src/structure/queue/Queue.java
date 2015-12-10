@@ -2,24 +2,28 @@ package structure.queue;
 
 import java.util.NoSuchElementException;
 
-public class Queue {
+public class Queue<E> {
 
 	private int N = 0;
 	private Node head = null;
 	private Node tail = null;
 
 	class Node {
-		private int value;
+		private E e;
 		private Node next;
+
 	}
 
 	public boolean isEmpty() {
 		return head == null;
 	}
 
-	public void enque(int value) {
+	public void enque(E e) {
+		if (e == null) {
+			return;
+		}
 		Node node = new Node();
-		node.value = value;
+		node.e = e;
 
 		if (isEmpty()) {
 			head = node;
@@ -32,16 +36,17 @@ public class Queue {
 		N++;
 	}
 
-	public void deque() {
+	public E deque() {
 		if (isEmpty())
 			throw new NoSuchElementException("Queue underflow");
-		int value = head.value;
+		E e = head.e;
 		head = head.next;
 		N--;
+		return e;
 	}
 
-	public int peek() {
-		return head.value;
+	public E peek() {
+		return head.e;
 	}
 
 	public int getSize() {
@@ -49,14 +54,17 @@ public class Queue {
 	}
 
 	public static void main(String[] args) {
-		Queue q = new Queue();
+		Queue<Integer> q = new Queue<Integer>();
 		q.enque(1);
 		q.enque(2);
 		q.enque(3);
 		q.deque();
+		q.deque();
+		q.deque();
+		System.out.println(q.isEmpty());
 		System.out.println(q.peek());
 		while (q.head != null) {
-			System.out.println(q.head.value);
+			System.out.println(q.head.e);
 			q.head = q.head.next;
 		}
 
