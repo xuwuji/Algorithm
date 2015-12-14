@@ -1,5 +1,10 @@
 package structure.tree;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.tree.TreeNode;
+
 import structure.queue.Queue;
 
 public class BinaryTree<Key extends Comparable<Key>, E> {
@@ -65,6 +70,20 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		while (pointer != null) {
 			if (key.equals(pointer.key)) {
 				return pointer.e;
+			} else if (key.compareTo(pointer.key) < 0) {
+				pointer = pointer.left;
+			} else {
+				pointer = pointer.right;
+			}
+		}
+		return null;
+	}
+
+	public Node findNode(Key key) {
+		Node pointer = root;
+		while (pointer != null) {
+			if (key.equals(pointer.key)) {
+				return pointer;
 			} else if (key.compareTo(pointer.key) < 0) {
 				pointer = pointer.left;
 			} else {
@@ -306,23 +325,119 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 	}
 
-	public boolean isBST(Node pointer) {
+	public boolean isBST() {
+		return isBSTHelper(root, null, null);
+	}
 
-		if (pointer.left != null) {
-			if (pointer.left.key.compareTo(pointer.key) > 0) {
-				return false;
-			} else {
-				isBST(pointer.left);
-			}
+	/**
+	 * the helper method: each node should between the correct low value and the
+	 * correct high value
+	 * 
+	 * @param pointer
+	 * @param low
+	 * @param high
+	 * @return
+	 */
+	public boolean isBSTHelper(Node pointer, Key low, Key high) {
+		if (pointer == null) {
+			return true;
 		}
-		if (pointer.right != null) {
-			if (pointer.right.key.compareTo(pointer.key) < 0) {
-				return false;
-			} else {
-				isBST(pointer.right);
-			}
+		if ((low == null || pointer.key.compareTo(low) > 0) && (high == null || pointer.key.compareTo(high) < 0)
+				&& isBSTHelper(pointer.left, low, pointer.key) && isBSTHelper(pointer.right, pointer.key, high)) {
+			return true;
 		}
-		return true;
+		return false;
+	}
+
+	public Node invertTree(Node root) {
+		if (root == null) {
+			return root;
+		}
+		Node temp = root.right;
+		root.right = root.left;
+		root.left = temp;
+		invertTree(root.left);
+		invertTree(root.right);
+		return root;
+	}
+
+	public void getSymmetric(Node pointer) {
+
+		if (pointer != null) {
+			System.out.println(pointer.toString());
+			Node temp = pointer.left;
+			pointer.left = pointer.right;
+			pointer.right = temp;
+			getSymmetric(pointer.left);
+			getSymmetric(pointer.right);
+		}
+	}
+
+	public boolean hasPathSum(Node root, int sum) {
+
+		if (root == null) {
+			return false;
+		}
+
+		System.out.println(root.toString());
+
+		sum = sum - Integer.valueOf(String.valueOf(root.key));
+		System.out.println(sum);
+		// System.out.println(root.left.toString());
+		// System.out.println(root.right.toString());
+		if (root.left == null && root.right == null) {
+			// System.out.println("yes" + root.toString());
+		}
+		if (sum == 0 && root.left == null && root.right == null) {
+			System.out.println("yes" + root.toString());
+			return true;
+		}
+
+		return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
+		// return hasPathSum(root.right, sum);
+
+		// return false;
+
+	}
+
+	public List<String> binaryTreePaths(Node root) {
+
+		List<String> list = new ArrayList<String>();
+		if (root == null) {
+			return list;
+		}
+		StringBuilder sb = new StringBuilder();
+		helper(list, "", root);
+		return list;
+	}
+
+	public void helper(List<String> list, String string, Node pointer) {
+		if (pointer == null) {
+			return;
+		}
+		StringBuilder temp = new StringBuilder();
+		if (pointer.left == null && pointer.right == null) {
+			string = string + pointer.key;
+			list.add(string);
+			System.out.println("add:" + string);
+		} else {
+			string += pointer.key + "->";
+
+			// StringBuilder temp1 = sb;
+			// System.out.println("temp1:" + temp1.toString());
+			// StringBuilder temp2 = sb;
+			// System.out.println("temp2:" + temp2.toString());
+			if (pointer.left != null) {
+				System.out.println("sb:" + string);
+				helper(list, string, pointer.left);
+			}
+
+			if (pointer.right != null) {
+				System.out.println("sb:" + string);
+				helper(list, string, pointer.right);
+			}
+
+		}
 	}
 
 	public static void main(String[] args) {
@@ -338,7 +453,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		tree.addNode(2, "b");
 		tree.addNode(5, "e");
 		tree.addNode(9, "i");
-		tree.addNode(10, "j");
+		// tree.addNode(10, "j");
 		// tree.delete(9, tree.root);
 		// tree.delete(3);
 		// tree.root.left.left = tree.root.left.left.right;
@@ -350,15 +465,24 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		// tree.LevelOrderTraverse(tree.root);
 		// tree.ReverseLevelOrderTraverse(tree.root);
 
-		// System.out.println(tree.find(6));
+		System.out.println(tree.findNode(5).left);
 		// System.out.println(tree.root.toString());
 		// System.out.println(tree.isBST(tree.root));
 		System.out.println("max:" + tree.getMaxHeight(tree.root));
 		System.out.println("min:" + tree.getMinHeight(tree.root));
-		System.out.println(tree.getNodesCount(tree.root));
+		System.out.println("nodes number under root(including):" + tree.getNodesCount(tree.root));
 		int k = 2;
-		System.out.println("the nodes on the " + k + " level:" + tree.getLevelNodesCount(k));
-		System.out.println(tree.getLevelNodesCounthelper(null, 2));
+		System.out.println("the nodes on the " + k + "th level:" + tree.getLevelNodesCount(k));
+		System.out.println("this is a BST:" + tree.isBST());
+		// tree.invertTree(tree.root);
+		// tree.LevelOrderTraverse(tree.root);
+		// tree.getSymmetric(tree.root);
+		// tree.LevelOrderTraverse(tree.root);
+		System.out.println(tree.hasPathSum(tree.root, 18));
+		List<String> list = tree.binaryTreePaths(tree.root);
+		for (String s : list) {
+			System.out.println(s);
+		}
 	}
 
 }
