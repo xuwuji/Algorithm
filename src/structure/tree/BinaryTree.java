@@ -237,7 +237,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	}
 
 	/**
-	 * count the all nodes under a node
+	 * count the all nodes under a node,including itself
 	 * 
 	 * @param pointer
 	 * @return
@@ -248,6 +248,36 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		} else {
 			return 1 + getNodesCount(pointer.left) + getNodesCount(pointer.right);
 		}
+	}
+
+	/**
+	 * return the rank a given key
+	 * 
+	 * @param pointer
+	 * @return
+	 */
+	public int rank(Key key) {
+
+		if (key == null) {
+			return 0;
+		}
+
+		return rank(key, root);
+
+	}
+
+	public int rank(Key key, Node pointer) {
+		if (pointer == null) {
+			return 0;
+		}
+		if (key.compareTo(pointer.key) < 0) {
+			return rank(key, pointer.left);
+		} else if (key.compareTo(pointer.key) > 0) {
+			return getNodesCount(pointer.left) + rank(key, pointer.right);
+		} else {
+			return getNodesCount(pointer.left) + 1;
+		}
+
 	}
 
 	/**
@@ -381,10 +411,8 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 		sum = sum - Integer.valueOf(String.valueOf(root.key));
 		System.out.println(sum);
-		// System.out.println(root.left.toString());
 		// System.out.println(root.right.toString());
 		if (root.left == null && root.right == null) {
-			// System.out.println("yes" + root.toString());
 		}
 		if (sum == 0 && root.left == null && root.right == null) {
 			System.out.println("yes" + root.toString());
@@ -392,9 +420,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 
 		return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
-		// return hasPathSum(root.right, sum);
-
-		// return false;
 
 	}
 
@@ -512,6 +537,45 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		return PathBetweenRootToNode(root, p) + PathBetweenRootToNode(root, q);
 	}
 
+	/**
+	 * return all nodes between key1 and key2 (not including)
+	 * 
+	 * @param key1
+	 * @param key2
+	 * @return
+	 */
+	public List<Node> rangeSearch(Key key1, Key key2) {
+		List<Node> list = new ArrayList<Node>();
+		list = rangeSearch(list, root, key1, key2);
+		return list;
+
+	}
+
+	public List<Node> rangeSearch(List<Node> list, Node pointer, Key key1, Key key2) {
+		if (pointer == null) {
+			return list;
+		}
+
+		if (pointer.key.compareTo(key2) < 0 && pointer.key.compareTo(key1) > 0) {
+			list.add(pointer);
+		}
+		rangeSearch(list, pointer.left, key1, key2);
+		rangeSearch(list, pointer.right, key1, key2);
+		return list;
+	}
+
+	/**
+	 * count the number of nodes between key1 and key2
+	 * 
+	 * @param key1
+	 * @return
+	 */
+	public int countRange(Key key1, Key key2) {
+		List<Node> list = new ArrayList<Node>();
+		list = rangeSearch(key1, key2);
+		return list.size();
+	}
+
 	public static void main(String[] args) {
 		BinaryTree<Integer, String> tree = new BinaryTree<Integer, String>();
 		tree.addNode(6, "f");
@@ -561,6 +625,9 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		System.out.println(tree.PathBetweenRootToNode(tree.root, tree.root.left.right));
 		System.out.println(
 				tree.getShortestPathBetweenTwoNodes(tree.root, tree.root.left.right, tree.root.right.right.right));
+		System.out.println(tree.countRange(2, 4));
+		System.out.println(tree.rank(1));
+
 	}
 
 }
