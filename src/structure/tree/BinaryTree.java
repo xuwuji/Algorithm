@@ -3,8 +3,6 @@ package structure.tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
-
 import structure.queue.Queue;
 
 public class BinaryTree<Key extends Comparable<Key>, E> {
@@ -440,6 +438,80 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 	}
 
+	public int LongestPath(Node root) {
+		if (root == null) {
+			return -1;
+		}
+
+		int maxLeft = 0;
+		int maxRight = 0;
+
+		maxLeft = 1 + getMaxHeight(root.left);
+		maxRight = 1 + getMaxHeight(root.right);
+
+		int lLongPath = LongestPath(root.left);
+		int rLongPath = LongestPath(root.right);
+
+		return Math.max(Math.max(lLongPath, rLongPath), maxLeft + maxRight);
+	}
+
+	public Node FindTheAncestor(Node root, Node p, Node q) {
+		if (root == null) {
+			return null;
+		}
+
+		if (p == root) {
+			return p;
+		}
+
+		if (q == root) {
+			return q;
+		}
+
+		Node left = FindTheAncestor(root.left, p, q);
+		Node right = FindTheAncestor(root.right, p, q);
+
+		if (left == null && right == null) {
+			return null;
+		}
+
+		if (left != null && right == null) {
+			return left;
+		}
+
+		if (right != null && left == null) {
+			return right;
+		}
+
+		return root;
+	}
+
+	public int PathBetweenRootToNode(Node root, Node p) {
+		if (root == null) {
+			return -1;
+		}
+
+		if (root == p) {
+			return 0;
+		}
+
+		if (root.left == null) {
+			return 1 + PathBetweenRootToNode(root.right, p);
+		}
+
+		if (root.right == null) {
+			return 1 + PathBetweenRootToNode(root.left, p);
+		}
+
+		return 1 + Math.min(PathBetweenRootToNode(root.left, p), PathBetweenRootToNode(root.right, p));
+
+	}
+
+	public int getShortestPathBetweenTwoNodes(Node root, Node p, Node q) {
+		Node ancestor = FindTheAncestor(root, p, q);
+		return PathBetweenRootToNode(root, p) + PathBetweenRootToNode(root, q);
+	}
+
 	public static void main(String[] args) {
 		BinaryTree<Integer, String> tree = new BinaryTree<Integer, String>();
 		tree.addNode(6, "f");
@@ -483,6 +555,12 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		for (String s : list) {
 			System.out.println(s);
 		}
+
+		// System.out.println(tree.LongestPath(tree.root.right.right.right));
+		// System.out.println(tree.LongestPath(tree.root.right.right.right));
+		System.out.println(tree.PathBetweenRootToNode(tree.root, tree.root.left.right));
+		System.out.println(
+				tree.getShortestPathBetweenTwoNodes(tree.root, tree.root.left.right, tree.root.right.right.right));
 	}
 
 }
