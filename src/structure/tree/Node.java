@@ -1,14 +1,14 @@
 package structure.tree;
 
-public class Node<Key extends Comparable<Key>, E> {
+public class Node<Key extends Comparable<Key>, Value> {
 	Key key;
-	E e;
-	Node left;
-	Node right;
+	Value value;
+	Node<Key, Value> left;
+	Node<Key, Value> right;
 
 	@Override
 	public String toString() {
-		return "Node [key=" + key + ", e=" + e + "]";
+		return "Node [key=" + key + ", value=" + value + "]";
 	}
 
 }
