@@ -1,17 +1,17 @@
 package structure.graph;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class UndirectedGraph {
 
-	private ArrayList<Integer>[] adjs;
+	private LinkedList<Integer>[] adjs;
 	private int E;
 	private int V;
 
 	public UndirectedGraph(int V) {
-		adjs = (ArrayList<Integer>[]) new ArrayList[V];
+		adjs = (LinkedList<Integer>[]) new LinkedList[V];
 		for (int i = 0; i < V; i++) {
-			adjs[i] = new ArrayList<Integer>();
+			adjs[i] = new LinkedList<Integer>();
 		}
 	}
 
@@ -37,7 +37,7 @@ public class UndirectedGraph {
 	 * @return number of vertices
 	 */
 	public int V() {
-
+		return adjs.length;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class UndirectedGraph {
 	 * @return number of edges
 	 */
 	public int E() {
-
+		return E;
 	}
 
 	public static int degree(UndirectedGraph graph, int v) {
