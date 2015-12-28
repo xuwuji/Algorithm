@@ -1,4 +1,6 @@
-package structure.graph;
+package structure.undirectedgraph.application;
+
+import structure.undirectedgraph.UndirectedGraph;
 
 /**
  * check whether a graph is bipartite graph
@@ -8,19 +10,23 @@ package structure.graph;
  */
 public class BipartiteGraph {
 
-	public boolean isBipartite(UndirectedGraph graph) {
+	public static boolean isBipartite(UndirectedGraph graph) {
 		boolean[] marked = new boolean[graph.V()];
 		boolean[] color = new boolean[graph.V()];
 		boolean isTwoColorable = true;
 		for (int pointer = 0; pointer < graph.V(); pointer++)
 			if (!marked[pointer]) {
-				isBipartiteDFS(graph, pointer, marked, color, isTwoColorable);
+				isTwoColorable = isBipartiteDFS(graph, pointer, marked, color, isTwoColorable);
+				if (isTwoColorable == false) {
+					return false;
+				}
 			}
 		return isTwoColorable;
 	}
 
-	public void isBipartiteDFS(UndirectedGraph graph, int v, boolean[] marked, boolean[] color,
+	public static boolean isBipartiteDFS(UndirectedGraph graph, int v, boolean[] marked, boolean[] color,
 			boolean isTwoColorable) {
+		System.out.println("current:" + v);
 		marked[v] = true;
 		for (int w : graph.adj(v)) {
 			if (!marked[w]) {
@@ -30,6 +36,6 @@ public class BipartiteGraph {
 				isTwoColorable = false;
 			}
 		}
-		isTwoColorable = true;
+		return isTwoColorable;
 	}
 }

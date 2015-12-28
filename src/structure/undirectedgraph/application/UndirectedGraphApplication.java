@@ -1,4 +1,6 @@
-package structure.graph;
+package structure.undirectedgraph.application;
+
+import structure.undirectedgraph.UndirectedGraph;
 
 public class UndirectedGraphApplication {
 

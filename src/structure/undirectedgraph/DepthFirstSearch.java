@@ -1,4 +1,4 @@
-package structure.graph;
+package structure.undirectedgraph;
 
 import java.util.Stack;
 
