@@ -1,4 +1,4 @@
-package stucture.directedgraph;
+package structure.directedgraph;
 
 import java.util.ArrayList;
 import java.util.List;
