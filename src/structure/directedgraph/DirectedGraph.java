@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * 
  * @author wuxu
- * @time 2015Äê12ÔÂ29ÈÕ
+ * @time 2015ï¿½ï¿½12ï¿½ï¿½29ï¿½ï¿½
  */
 public class DirectedGraph {
 	// the number of vertices in the graph
@@ -16,6 +16,7 @@ public class DirectedGraph {
 	LinkedList<Integer>[] adjs;
 
 	public DirectedGraph(int V) {
+		this.V = V;
 		adjs = (LinkedList<Integer>[]) new LinkedList[V];
 		for (int i = 0; i < V; i++) {
 			adjs[i] = new LinkedList<Integer>();
