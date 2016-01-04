@@ -39,7 +39,7 @@ public class Edge implements Comparable<Edge> {
 	}
 
 	public String toString() {
-		return "(" + either + "," + other + "" + weight + ")";
+		return "(" + either + ", " + other + "  " + weight + ")";
 	}
 
 }

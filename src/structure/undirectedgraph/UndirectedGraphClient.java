@@ -8,6 +8,9 @@ import structure.undirectedgraph.application.CycleGraphCheck;
 public class UndirectedGraphClient {
 
 	public static void main(String args[]) {
+		Integer[] test = new Integer[2];
+		System.out.println(test[1] == null);
+
 		UndirectedGraph graph = new UndirectedGraph(6);
 		graph.addEdge(0, 2);
 		graph.addEdge(0, 1);
