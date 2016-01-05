@@ -1,9 +1,14 @@
 package structure.minimumSpanningTree;
 
+import structure.shorestPath.DirectedEdge;
+import structure.shorestPath.EdgeWeightedDirectedGraph;
+import structure.shorestPath.ShortestPathTree;
+
 public class EdgeWeightedGraphClient {
 	public static void main(String[] args) {
 
 		EdgeWeightedGraph G = new EdgeWeightedGraph(10);
+		EdgeWeightedDirectedGraph G1 = new EdgeWeightedDirectedGraph(10);
 		G.addEdge(new Edge(0, 7, 0.16));
 		G.addEdge(new Edge(2, 3, 0.17));
 		G.addEdge(new Edge(1, 7, 0.19));
@@ -14,6 +19,7 @@ public class EdgeWeightedGraphClient {
 		G.addEdge(new Edge(0, 3, 0.10));
 		G.addEdge(new Edge(3, 4, 0.2));
 		G.addEdge(new Edge(3, 5, 0.2));
+		G1.addEdge(new DirectedEdge(0, 7, 0.1));
 		KruskalMST mst = new KruskalMST(G);
 		LazyPrimMST lpmst = new LazyPrimMST(G);
 		System.out.printf("kruskal---------------------------------");
@@ -26,5 +32,7 @@ public class EdgeWeightedGraphClient {
 			System.out.println(e);
 		}
 		System.out.printf("%.5f\n", lpmst.weight());
+		System.out.printf("shortest path ------------------------------");
+		ShortestPathTree sp = new ShortestPathTree(G1, 0);
 	}
 }
