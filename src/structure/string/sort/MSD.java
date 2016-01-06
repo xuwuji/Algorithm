@@ -108,7 +108,9 @@ public class MSD {
 
 	public static void main(String[] args) {
 		String[] a = new String[] { "awwe", "v332", "cdd2", "dwqedqwe", "ee2132eeds", "dsd", "we", "weqwe" };
+		String[] b = new String[] { "a", };
 		MSD.sort(a);
+		MSD.sort(b);
 		for (int i = 0; i < a.length; i++) {
 			System.out.print(a[i] + " ");
 		}
@@ -116,5 +118,11 @@ public class MSD {
 		for (int i = a.length - 1; i >= 0; i--) {
 			System.out.print(a[i] + " ");
 		}
+
+		System.out.println("b-------------");
+		for (int i = b.length - 1; i >= 0; i--) {
+			System.out.print(b[i] + " ");
+		}
+
 	}
 }
