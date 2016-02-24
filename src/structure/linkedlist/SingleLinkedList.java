@@ -29,7 +29,7 @@ import structure.exception.NotValidInputException;
  * 
  *         5.iterate
  */
-public class SingleLinkedList<T> implements Iterable<T> {
+public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 
 	class Node<T> {
 		private T value;
@@ -44,7 +44,7 @@ public class SingleLinkedList<T> implements Iterable<T> {
 		}
 	}
 
-	private Node<T> head;
+	private Node<T> head = null;
 
 	/**
 	 * return the nth-to-the-end node in the linked list
@@ -159,7 +159,6 @@ public class SingleLinkedList<T> implements Iterable<T> {
 	 * cyclic or acyclic.
 	 *
 	 * 
-	 * 
 	 * What can you do with two point- ers that you couldn’t do with one? You
 	 * can advance them on top of each other, but then you might as well have
 	 * one pointer. You could advance them with a xed interval between them, but
@@ -190,6 +189,42 @@ public class SingleLinkedList<T> implements Iterable<T> {
 			fast = fast.next;
 			slow = slow.next;
 		}
+	}
+
+	/**
+	 * merge two sorted linked list
+	 * 
+	 * @param a
+	 */
+	public Node mergerTwoSortedList(Node<T> a, Node<T> b) {
+		Node<T> newHead = new Node<T>();
+		Node<T> pointer = newHead;
+		while (a != null || b != null) {
+			if (a == null) {
+				while (b != null) {
+					pointer.next = b;
+					pointer = pointer.next;
+					b = b.next;
+				}
+			} else if (b == null) {
+				while (a != null) {
+					pointer.next = a;
+					pointer = pointer.next;
+					a = a.next;
+				}
+			} else {
+				if (a.value.compareTo(b.value) < 0) {
+					pointer.next = a;
+					a = a.next;
+					pointer = pointer.next;
+				} else {
+					pointer.next = b;
+					b = b.next;
+					pointer = pointer.next;
+				}
+			}
+		}
+		return newHead.next;
 	}
 
 	public static void main(String[] args) {
@@ -228,8 +263,39 @@ public class SingleLinkedList<T> implements Iterable<T> {
 		System.out.println("\n");
 
 		// 4. chech if a cycle in the single linked list
+		System.out.println("----check cycle----");
 		list.head.next.next = list.head.next;
 		System.out.println("there is a cycle in the list:" + list.isCycle());
+
+		// 5.merge two sorted single linked list
+		SingleLinkedList<Integer> listA = new SingleLinkedList<Integer>();
+		SingleLinkedList<Integer> listB = new SingleLinkedList<Integer>();
+		listA.addAtLast(1);
+		listA.addAtLast(3);
+		listA.addAtLast(5);
+		listB.addAtLast(2);
+		listB.addAtLast(4);
+		listB.addAtLast(6);
+
+		System.out.println("\n");
+		System.out.println("----merge two sorted linked list----");
+		System.out.println("----before----");
+		for (Integer s : listA) {
+			System.out.print(s + "->");
+		}
+		System.out.println("\n");
+		for (Integer s : listB) {
+			System.out.print(s + "->");
+		}
+		System.out.println("\n");
+
+		listA.mergerTwoSortedList(listA.head, listB.head);
+
+		System.out.println("----after----");
+		for (Integer s : listA) {
+			System.out.print(s + "->");
+		}
+		System.out.println("\n");
 
 	}
 
