@@ -6,15 +6,38 @@ import java.util.NoSuchElementException;
 import structure.exception.NotValidInputException;
 
 /**
+ * Each element in a singly linked list contains a pointer to the next element
+ * in the list, whereas each element in a doubly linked list points to both the
+ * previous and the next elements. The rst ele- ment in both list types is
+ * referred to as the head, whereas the last element is referred to as the tail.
+ * Circular linked lists have no head or tail; instead, the elements are linked
+ * together to form a cycle. List operations are much simpler to perform on
+ * doubly linked lists, so most interview problems use singly linked lists.
+ * Typical operations include updating the head of the list, traversing the list
+ * to nd a speci c element from the end of the list, and inserting or removing
+ * list elements.
  * 
  * @author wuxu 2016-2-23
  *
+ *         1.add at the first
+ *
+ *         2.add at the end
+ *
+ *         3.reverse the linked list
+ *
+ *         4.check cycle
+ * 
+ *         5.iterate
  */
 public class SingleLinkedList<T> implements Iterable<T> {
 
 	class Node<T> {
 		private T value;
 		private Node<T> next;
+
+		public Node() {
+
+		}
 
 		public Node(T value) {
 			this.value = value;
@@ -108,23 +131,105 @@ public class SingleLinkedList<T> implements Iterable<T> {
 		}
 	}
 
+	/**
+	 * reverse a single linked list
+	 */
+	public void reverse() {
+		if (isEmpty()) {
+			throw new NoSuchElementException("empty linked list");
+		}
+		Node<T> newHead = null;
+		Node<T> pointer = head;
+		while (pointer != null) {
+			Node<T> temp = pointer;
+			pointer = pointer.next;
+			temp.next = newHead;
+			newHead = temp;
+		}
+		head = newHead;
+	}
+
+	/**
+	 * determine whether there is a cycle in the linked list
+	 * 
+	 * The difference between the two lists appears at their ends. In the cyclic
+	 * list, there is an end node that points back to one of the earlier nodes.
+	 * In the acyclic list, there is an end node that is null termi- nated.
+	 * Thus, if you can nd this end node, you can test whether the list is
+	 * cyclic or acyclic.
+	 *
+	 * 
+	 * 
+	 * What can you do with two point- ers that you couldn’t do with one? You
+	 * can advance them on top of each other, but then you might as well have
+	 * one pointer. You could advance them with a xed interval between them, but
+	 * this doesn’t seem to gain anything. What happens if you advance the
+	 * pointers at different speeds? In the acyclic list, the faster pointer
+	 * reaches the end. In the cyclic list, they both loop endlessly. The faster
+	 * pointer eventually catches up with and passes the slower pointer. If the
+	 * fast pointer is ever behind or equal to the slower pointer, you have a
+	 * cyclic list. If it encounters a null pointer, you have an acyclic list.
+	 * You’ll need to start the fast pointer one node ahead of the slow pointer
+	 * so they’re not equal to begin with.
+	 * 
+	 * @return
+	 */
+	public boolean isCycle() {
+		if (isEmpty()) {
+			return false;
+		}
+		Node<T> fast = head.next;
+		Node<T> slow = head;
+		while (true) {
+			if (fast == slow || fast.next == slow) {
+				return true;
+			}
+			if (fast == null || fast.next == null) {
+				return false;
+			}
+			fast = fast.next;
+			slow = slow.next;
+		}
+	}
+
 	public static void main(String[] args) {
 		SingleLinkedList<String> list = new SingleLinkedList<String>();
+		// create a single linked list
 		list.addAtFirst("a");
 		list.addAtFirst("b");
 		list.addAtFirst("c");
-		list.addAtLast("f");
-		list.addAtFirst("d");
-		list.addAtFirst("e");
 
+		// list.addAtLast("f");
+		// list.addAtFirst("d");
+		// list.addAtFirst("e");
+
+		// 1.traverse the single linked list
+		System.out.println("----traverse----");
 		for (String s : list) {
-			System.out.println(s);
+			System.out.print(s + "->");
 		}
+		System.out.println("\n");
+
+		// 2.get the nth to the end element in the list
+		System.out.println("----n th to the end----");
 		try {
 			System.out.println(list.NthToTheEnd(2));
 		} catch (NotValidInputException e) {
 			e.printStackTrace();
 		}
+		System.out.println("\n");
+
+		// 3.reverse the linked list
+		list.reverse();
+		System.out.println("----reverse----");
+		for (String s : list) {
+			System.out.print(s + "->");
+		}
+		System.out.println("\n");
+
+		// 4. chech if a cycle in the single linked list
+		list.head.next.next = list.head.next;
+		System.out.println("there is a cycle in the list:" + list.isCycle());
 
 	}
 
