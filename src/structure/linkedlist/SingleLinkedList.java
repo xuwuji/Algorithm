@@ -1,5 +1,6 @@
 package structure.linkedlist;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -28,6 +29,13 @@ import structure.exception.NotValidInputException;
  *         4.check cycle
  * 
  *         5.iterate
+ * 
+ *         6.merge two sorted linked list
+ * 
+ *         7.remove duplicated nodes from an unsorted linked list
+ * 
+ *         8.delete a node in the middle of the list, given that node and
+ *         requires O(1) time
  */
 public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 
@@ -227,6 +235,26 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 		return newHead.next;
 	}
 
+	/**
+	 * remove duplicated nodes in the linked list
+	 */
+	public void removeDuplicatedNodes() {
+		if (isEmpty()) {
+			return;
+		}
+		HashSet<T> set = new HashSet();
+		Node<T> pointer = head;
+		set.add(pointer.value);
+		while (pointer != null && pointer.next != null) {
+			if (set.contains(pointer.next.value)) {
+				pointer.next = pointer.next.next;
+			} else {
+				set.add(pointer.next.value);
+				pointer = pointer.next;
+			}
+		}
+	}
+
 	public static void main(String[] args) {
 		SingleLinkedList<String> list = new SingleLinkedList<String>();
 		// create a single linked list
@@ -297,6 +325,21 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 		}
 		System.out.println("\n");
 
+		// 6. remove duplicated nodes in the linked list
+		System.out.println("----remove duplicated nodes----");
+		SingleLinkedList<Integer> listC = new SingleLinkedList<Integer>();
+		listC.addAtLast(1);
+		listC.addAtLast(2);
+		listC.addAtLast(1);
+		listC.addAtLast(2);
+		for (int i : listC) {
+			System.out.print(i + "->");
+		}
+		listC.removeDuplicatedNodes();
+		System.out.println("\n");
+		for (int i : listC) {
+			System.out.print(i + "->");
+		}
 	}
 
 }
