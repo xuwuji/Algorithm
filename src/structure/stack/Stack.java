@@ -11,8 +11,9 @@ import java.util.NoSuchElementException;
  * Both operations change the first element of the list
  * 
  * @author wuxu 2016-2-23
+ * 
  */
-public class Stack<T> implements Iterable<T> {
+public class Stack<T extends Comparable> implements Iterable<T> {
 
 	class Node<T> {
 		private T value;
@@ -96,10 +97,10 @@ public class Stack<T> implements Iterable<T> {
 			stack.push(1);
 			stack.push(2);
 			stack.push(3);
-			stack.pop();
-			stack.pop();
-			stack.pop();
-			stack.pop();
+			// stack.pop();
+			// stack.pop();
+			// stack.pop();
+			// stack.pop();
 		} catch (NoSuchElementException e) {
 			System.out.println("stack is empty");
 		}
