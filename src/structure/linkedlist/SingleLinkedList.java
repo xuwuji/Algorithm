@@ -328,14 +328,14 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 		// 1.use two pointers slow and fast to check for middle position
 		Node<T> fast = head;
 		Node<T> slow = head;
-		while (fast.next.next != null) {
+		while (fast != null && fast.next != null) {
 			stack.push(slow.value);
 			slow = slow.next;
 			fast = fast.next.next;
 		}
-		// if the list is even, move the slow to next position, if it is odd,
-		// just skip
-		if (fast.next != null) {
+		// if the list is odd, move the slow to next position( cross the middle
+		// position), if it is an even list,just skip this step
+		if (fast != null) {
 			slow = slow.next;
 		}
 
@@ -437,11 +437,22 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 
 		// 7. check if it is parlindrome
 		System.out.println("----check palindrome----");
+		SingleLinkedList<Integer> listD = new SingleLinkedList<Integer>();
+		listD.addAtLast(1);
+		listD.addAtLast(2);
+		listD.addAtLast(2);
+		listD.addAtLast(1);
 		for (int i : listC) {
 			System.out.print(i + "->");
 		}
 		System.out.println("\n");
-		System.out.println("it is palindrom" + listC.checkPalindrome());
+		System.out.println("it is palindrom: " + listC.checkPalindrome());
+		for (int i : listD) {
+			System.out.print(i + "->");
+		}
+		System.out.println("\n");
+		System.out.println("it is palindrom: " + listD.checkPalindrome());
+
 	}
 
 }
