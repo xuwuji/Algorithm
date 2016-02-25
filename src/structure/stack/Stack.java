@@ -49,7 +49,6 @@ public class Stack<T extends Comparable> implements Iterable<T> {
 		if (isEmpty()) {
 			throw new NoSuchElementException("Stack underflow");
 		}
-
 		return head.value;
 	}
 

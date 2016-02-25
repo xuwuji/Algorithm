@@ -15,4 +15,8 @@ public class Util {
 
 	}
 
+	public static int randomInt() {
+		return (int) (Math.random() * ((1000) + 1));
+	}
+
 }
