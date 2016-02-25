@@ -40,7 +40,7 @@ import structure.stack.Stack;
  * 
  *         9.if there is a cycle in the linked list, find the head of the cycle
  * 
- *         10.check if the linked list is a palindrome
+ *         10.check if the linked list is palindrome
  */
 public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 
@@ -265,7 +265,7 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 	 * @return
 	 */
 	public Node<T> findHeadOfTheCycle() {
-		Node<T> fast = head.next;
+		Node<T> fast = head;
 		Node<T> slow = head;
 		while (true) {
 			// if there is no cycle in the cycle
@@ -276,7 +276,7 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 			if (fast == slow) {
 				break;
 			}
-			fast = fast.next;
+			fast = fast.next.next;
 			slow = slow.next;
 		}
 
@@ -333,8 +333,13 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 			slow = slow.next;
 			fast = fast.next.next;
 		}
-		// if the list is odd, move the slow to next position( cross the middle
-		// position), if it is an even list,just skip this step
+		// if the list is odd, now the fast is at the end node of the list and
+		// slow is at the middle position, so move the slow to next position to
+		// cross the middle position;
+
+		// if it is an even list,now the fast is out of the list for one
+		// position and the slow is at the first position of the second half, so
+		// just skip this step
 		if (fast != null) {
 			slow = slow.next;
 		}
