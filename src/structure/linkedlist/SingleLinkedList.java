@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import structure.exception.NotValidInputException;
+import structure.stack.Stack;
 
 /**
  * Each element in a singly linked list contains a pointer to the next element
@@ -36,6 +37,10 @@ import structure.exception.NotValidInputException;
  * 
  *         8.delete a node in the middle of the list, given that node and
  *         requires O(1) time
+ * 
+ *         9.if there is a cycle in the linked list, find the head of the cycle
+ * 
+ *         10.check if the linked list is a palindrome
  */
 public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 
@@ -147,10 +152,9 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 			throw new NoSuchElementException("empty linked list");
 		}
 		Node<T> newHead = null;
-		Node<T> pointer = head;
-		while (pointer != null) {
-			Node<T> temp = pointer;
-			pointer = pointer.next;
+		while (head != null) {
+			Node<T> temp = head;
+			head = head.next;
 			temp.next = newHead;
 			newHead = temp;
 		}
@@ -255,6 +259,95 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 		}
 	}
 
+	/**
+	 * find the head of the cycle if it exists
+	 * 
+	 * @return
+	 */
+	public Node<T> findHeadOfTheCycle() {
+		Node<T> fast = head.next;
+		Node<T> slow = head;
+		while (true) {
+			// if there is no cycle in the cycle
+			if (fast == null || fast.next == null) {
+				return null;
+			}
+
+			if (fast == slow) {
+				break;
+			}
+			fast = fast.next;
+			slow = slow.next;
+		}
+
+		// move slow back to the head and keep the fast in the meeting place.
+		// Continue moving them and when they meet, the place is the head of the
+		// cycle
+		slow = head;
+		while (slow != fast) {
+			slow = slow.next;
+			fast = fast.next;
+		}
+		return fast;
+	}
+
+	/**
+	 * in the problem, you are not given the access of the head and only have
+	 * the access of the node wanted to be deleted
+	 * 
+	 * @param node
+	 */
+	public void deleteNodeInTheMiddle(Node<T> node) {
+		if (node == null) {
+			return;
+		}
+		if (node.next == null) {
+			node = null;
+		} else {
+			node.value = node.next.value;
+			node.next = node.next.next;
+		}
+	}
+
+	/**
+	 * check if the list is palindrome or not
+	 * 
+	 * solution 1:reverse the whole linked list and compare it with the original
+	 * one
+	 * 
+	 * solution 2:put the first half into a stack and pop , compare with the
+	 * second half one by one
+	 * 
+	 * 
+	 * Use the solution 2 here
+	 * 
+	 * @return
+	 */
+	public boolean checkPalindrome() {
+		Stack<T> stack = new Stack();
+		// 1.use two pointers slow and fast to check for middle position
+		Node<T> fast = head;
+		Node<T> slow = head;
+		while (fast.next.next != null) {
+			stack.push(slow.value);
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+		// if the list is even, move the slow to next position, if it is odd,
+		// just skip
+		if (fast.next != null) {
+			slow = slow.next;
+		}
+
+		while (!stack.isEmpty()) {
+			if (stack.pop() != slow.value) {
+				return false;
+			}
+			slow = slow.next;
+		}
+		return true;
+	}
+
 	public static void main(String[] args) {
 		SingleLinkedList<String> list = new SingleLinkedList<String>();
 		// create a single linked list
@@ -340,6 +433,15 @@ public class SingleLinkedList<T extends Comparable> implements Iterable<T> {
 		for (int i : listC) {
 			System.out.print(i + "->");
 		}
+		System.out.println("\n");
+
+		// 7. check if it is parlindrome
+		System.out.println("----check palindrome----");
+		for (int i : listC) {
+			System.out.print(i + "->");
+		}
+		System.out.println("\n");
+		System.out.println("it is palindrom" + listC.checkPalindrome());
 	}
 
 }
