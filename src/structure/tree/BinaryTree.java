@@ -1,7 +1,9 @@
 package structure.tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import structure.queue.Queue;
 
@@ -52,62 +54,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 	}
 
-	public Node deleteMin(Node pointer) {
-
-		if (pointer.left != null) {
-			pointer.left = deleteMin(pointer.left);
-		} else {
-			pointer = pointer.right;
-		}
-		return pointer;
-
-	}
-
-	public E find(Key key) {
-		Node pointer = root;
-		while (pointer != null) {
-			if (key.equals(pointer.key)) {
-				return pointer.e;
-			} else if (key.compareTo(pointer.key) < 0) {
-				pointer = pointer.left;
-			} else {
-				pointer = pointer.right;
-			}
-		}
-		return null;
-	}
-
-	public Node findNode(Key key) {
-		Node pointer = root;
-		while (pointer != null) {
-			if (key.equals(pointer.key)) {
-				return pointer;
-			} else if (key.compareTo(pointer.key) < 0) {
-				pointer = pointer.left;
-			} else {
-				pointer = pointer.right;
-			}
-		}
-		return null;
-	}
-
-	public boolean isContains(Key key) {
-		if (this.find(key) == null) {
-			return false;
-		}
-		return true;
-	}
-
-	public Node findMin(Node pointer) {
-
-		if (pointer.left != null) {
-			pointer.left = findMin(pointer.left);
-		} else {
-			return pointer;
-		}
-		return pointer;
-	}
-
 	public void delete(Key key) {
 		root = deleteHelper(key, root);
 	}
@@ -142,11 +88,99 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	public Node deleteMax(Node pointer) {
 
 		if (pointer.right != null) {
-			pointer.right = deleteMax(pointer.right);
+			return deleteMax(pointer.right);
 		} else {
 			pointer = pointer.left;
 		}
 		return pointer;
+	}
+
+	public Node deleteMin(Node pointer) {
+
+		if (pointer.left != null) {
+			return deleteMin(pointer.left);
+		} else {
+			pointer = pointer.right;
+		}
+		return pointer;
+
+	}
+
+	public boolean isContains(Key key) {
+		if (this.find(key) == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public E find(Key key) {
+		Node pointer = root;
+		while (pointer != null) {
+			if (key.equals(pointer.key)) {
+				return pointer.e;
+			} else if (key.compareTo(pointer.key) < 0) {
+				pointer = pointer.left;
+			} else {
+				pointer = pointer.right;
+			}
+		}
+		return null;
+	}
+
+	public E findRecursively(Node pointer, Key key) {
+		if (pointer == null) {
+			return null;
+		}
+		if (pointer.key == key) {
+			return pointer.e;
+		} else if (pointer.key.compareTo(key) > 0) {
+			return findRecursively(pointer.left, key);
+		} else {
+			return findRecursively(pointer.right, key);
+		}
+	}
+
+	public Node findNode(Key key) {
+		Node pointer = root;
+		while (pointer != null) {
+			if (key.equals(pointer.key)) {
+				return pointer;
+			} else if (key.compareTo(pointer.key) < 0) {
+				pointer = pointer.left;
+			} else {
+				pointer = pointer.right;
+			}
+		}
+		return null;
+	}
+
+	public Node findNodeRecursively(Node pointer, Key key) {
+		if (pointer == null) {
+			return null;
+		}
+		if (pointer.key == key) {
+			return pointer;
+		} else if (pointer.key.compareTo(key) > 0) {
+			return findNodeRecursively(pointer.left, key);
+		} else {
+			return findNodeRecursively(pointer.right, key);
+		}
+	}
+
+	public Node findMin(Node pointer) {
+		if (pointer.left != null) {
+			return findMin(pointer.left);
+		} else {
+			return pointer;
+		}
+	}
+
+	public Node findMax(Node pointer) {
+		if (pointer.right != null) {
+			return findMax(pointer.right);
+		} else {
+			return pointer;
+		}
 	}
 
 	/**
@@ -199,7 +233,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 
 		while (!queue.isEmpty()) {
-
 			Node node = queue.deque();
 			System.out.println(node.key);
 			if (node.left != null) {
@@ -236,6 +269,59 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 	}
 
+	public void PreOrderWithoutRecursive(Node pointer) {
+		Stack<Node> stack = new Stack<Node>();
+		stack.push(pointer);
+		while (!stack.isEmpty()) {
+			pointer = stack.pop();
+			System.out.println(pointer);
+			// pre-order:current,left,right
+			// stack is first-in-last-out
+			// so the right push to the stack first
+			if (pointer.right != null) {
+				stack.push(pointer.right);
+			}
+			if (pointer.left != null) {
+				stack.push(pointer.left);
+			}
+		}
+	}
+
+	public void InOrderWithoutRecursive(Node pointer) {
+		Stack<Node> stack = new Stack();
+		if (pointer == null) {
+			return;
+		}
+		while (pointer != null || !stack.isEmpty()) {
+			while (pointer != null) {
+				stack.push(pointer);
+				pointer = pointer.left;
+			}
+			pointer = stack.pop();
+			System.out.println(pointer);
+			pointer = pointer.right;
+		}
+	}
+
+	public void PostOrderWithOutRecursive(Node pointer) {
+		Stack<Node> stack = new Stack();
+		LinkedList<Node> result = new LinkedList<>();
+		stack.push(pointer);
+		while (!stack.isEmpty()) {
+			pointer = stack.pop();
+			result.addFirst(pointer);
+			if (pointer.left != null) {
+				stack.push(pointer.left);
+			}
+			if (pointer.right != null) {
+				stack.push(pointer.right);
+			}
+		}
+		for (Node n : result) {
+			System.out.println(n);
+		}
+	}
+
 	/**
 	 * count the all nodes under a node,including itself
 	 * 
@@ -251,7 +337,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	}
 
 	/**
-	 * return the rank a given key
+	 * return the rank by a given key
 	 * 
 	 * @param pointer
 	 * @return
@@ -263,7 +349,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 
 		return rank(key, root);
-
 	}
 
 	public int rank(Key key, Node pointer) {
@@ -282,7 +367,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 	/**
 	 * get the maximum height from a node to its leaf nodes. A node without
-	 * leaves should be 0 height,the root should be begin from 0
+	 * leaves should be 0 height,the root should begin from 0
 	 * 
 	 * @param pointer
 	 * @return
@@ -291,7 +376,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		if (pointer == null) {
 			return -1;
 		}
-
 		return 1 + Math.max(getMaxHeight(pointer.left), getMaxHeight(pointer.right));
 	}
 
@@ -309,13 +393,11 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 		if (pointer.left == null) {
 			return 1 + getMinHeight(pointer.right);
-		}
-
-		if (pointer.right == null) {
+		} else if (pointer.right == null) {
 			return 1 + getMinHeight(pointer.left);
+		} else {
+			return 1 + Math.min(getMinHeight(pointer.left), getMinHeight(pointer.right));
 		}
-
-		return 1 + Math.min(getMinHeight(pointer.left), getMinHeight(pointer.right));
 	}
 
 	/**
@@ -401,13 +483,76 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 	}
 
+	/**
+	 * can be used in normal binary tree
+	 * 
+	 * @param root
+	 * @param p
+	 * @param q
+	 * @return
+	 */
+	public Node FindLowestAncestorInBT(Node root, Node p, Node q) {
+		if (root == null) {
+			return null;
+		}
+
+		if (p == root) {
+			return p;
+		}
+
+		if (q == root) {
+			return q;
+		}
+
+		Node left = FindLowestAncestorInBT(root.left, p, q);
+		Node right = FindLowestAncestorInBT(root.right, p, q);
+
+		if (left == null && right == null) {
+			return null;
+		}
+
+		if (left != null && right == null) {
+			return left;
+		}
+
+		if (right != null && left == null) {
+			return right;
+		}
+
+		return root;
+	}
+
+	/**
+	 * only used in BST
+	 * 
+	 * @param root
+	 * @param p
+	 * @param q
+	 * @return
+	 */
+	public Node FindLowestAncestorInBST(Node root, Node p, Node q) {
+		if (root == null) {
+			return null;
+		}
+		while (root != null) {
+			if (root.key.compareTo(p.key) > 0 && root.key.compareTo(q.key) > 0) {
+				root = root.left;
+			} else if (root.key.compareTo(p.key) < 0 && root.key.compareTo(q.key) < 0) {
+				root = root.right;
+			} else {
+				return root;
+			}
+		}
+		return null;
+	}
+
 	public boolean hasPathSum(Node root, int sum) {
 
 		if (root == null) {
 			return false;
 		}
 
-		System.out.println(root.toString());
+		// System.out.println(root.toString());
 
 		sum = sum - Integer.valueOf(String.valueOf(root.key));
 		System.out.println(sum);
@@ -415,7 +560,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		if (root.left == null && root.right == null) {
 		}
 		if (sum == 0 && root.left == null && root.right == null) {
-			System.out.println("yes" + root.toString());
+			// System.out.println("yes" + root.toString());
 			return true;
 		}
 
@@ -423,13 +568,17 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 	}
 
+	/**
+	 * get all paths from the root to leaves
+	 * 
+	 * @param root
+	 * @return
+	 */
 	public List<String> binaryTreePaths(Node root) {
-
 		List<String> list = new ArrayList<String>();
 		if (root == null) {
 			return list;
 		}
-		StringBuilder sb = new StringBuilder();
 		helper(list, "", root);
 		return list;
 	}
@@ -438,28 +587,17 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		if (pointer == null) {
 			return;
 		}
-		StringBuilder temp = new StringBuilder();
 		if (pointer.left == null && pointer.right == null) {
 			string = string + pointer.key;
 			list.add(string);
-			System.out.println("add:" + string);
 		} else {
 			string += pointer.key + "->";
-
-			// StringBuilder temp1 = sb;
-			// System.out.println("temp1:" + temp1.toString());
-			// StringBuilder temp2 = sb;
-			// System.out.println("temp2:" + temp2.toString());
 			if (pointer.left != null) {
-				System.out.println("sb:" + string);
 				helper(list, string, pointer.left);
 			}
-
 			if (pointer.right != null) {
-				System.out.println("sb:" + string);
 				helper(list, string, pointer.right);
 			}
-
 		}
 	}
 
@@ -478,37 +616,6 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		int rLongPath = LongestPath(root.right);
 
 		return Math.max(Math.max(lLongPath, rLongPath), maxLeft + maxRight);
-	}
-
-	public Node FindTheAncestor(Node root, Node p, Node q) {
-		if (root == null) {
-			return null;
-		}
-
-		if (p == root) {
-			return p;
-		}
-
-		if (q == root) {
-			return q;
-		}
-
-		Node left = FindTheAncestor(root.left, p, q);
-		Node right = FindTheAncestor(root.right, p, q);
-
-		if (left == null && right == null) {
-			return null;
-		}
-
-		if (left != null && right == null) {
-			return left;
-		}
-
-		if (right != null && left == null) {
-			return right;
-		}
-
-		return root;
 	}
 
 	public int PathBetweenRootToNode(Node root, Node p) {
@@ -533,7 +640,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	}
 
 	public int getShortestPathBetweenTwoNodes(Node root, Node p, Node q) {
-		Node ancestor = FindTheAncestor(root, p, q);
+		Node ancestor = FindLowestAncestorInBT(root, p, q);
 		return PathBetweenRootToNode(root, p) + PathBetweenRootToNode(root, q);
 	}
 
@@ -603,9 +710,18 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 		System.out.println(tree.findNode(5).left);
 		// System.out.println(tree.root.toString());
-		// System.out.println(tree.isBST(tree.root));
-		System.out.println("max:" + tree.getMaxHeight(tree.root));
-		System.out.println("min:" + tree.getMinHeight(tree.root));
+		// System.out.println((tree.root));
+		System.out.println("min of the tree:" + tree.findMin(tree.root));
+		System.out.println("max of the tree:" + tree.findMax(tree.root));
+		System.out.println("recursively find a node by its key:" + tree.findNodeRecursively(tree.root, 2));
+		System.out.println("max height:" + tree.getMaxHeight(tree.root));
+		System.out.println("min height:" + tree.getMinHeight(tree.root));
+		System.out.println("----pre-order without recursive--------");
+		tree.PreOrderWithoutRecursive(tree.root);
+		System.out.println("----in-order without recursive--------");
+		tree.InOrderWithoutRecursive(tree.root);
+		System.out.println("----post-order without recursive--------");
+		tree.PostOrderWithOutRecursive(tree.root);
 		System.out.println("nodes number under root(including):" + tree.getNodesCount(tree.root));
 		int k = 2;
 		System.out.println("the nodes on the " + k + "th level:" + tree.getLevelNodesCount(k));
@@ -615,6 +731,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		// tree.getSymmetric(tree.root);
 		// tree.LevelOrderTraverse(tree.root);
 		System.out.println(tree.hasPathSum(tree.root, 18));
+		System.out.println("--------  all paths from root to leaves  ------");
 		List<String> list = tree.binaryTreePaths(tree.root);
 		for (String s : list) {
 			System.out.println(s);

@@ -64,10 +64,11 @@ public class StackWithMinMax<T extends Comparable> extends Stack<T> {
 	public static void main(String[] args) {
 		StackWithMinMax<Integer> stack = new StackWithMinMax<Integer>();
 		try {
-			stack.push(1);
+			// stack.push(1);
 			stack.push(2);
+			stack.push(1);
+			stack.pop();
 			stack.push(3);
-			// stack.pop();
 			// stack.pop();
 			// stack.pop();
 			// stack.pop();
