@@ -234,7 +234,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 		while (!queue.isEmpty()) {
 			Node node = queue.deque();
-			System.out.println(node.key);
+			System.out.println(node);
 			if (node.left != null) {
 				queue.enque(node.left);
 			}
@@ -256,9 +256,8 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		}
 
 		while (!queue.isEmpty()) {
-
 			Node node = queue.deque();
-			System.out.println(node.toString());
+			System.out.println(node);
 			if (node.right != null) {
 				queue.enque(node.right);
 			}
@@ -320,6 +319,31 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		for (Node n : result) {
 			System.out.println(n);
 		}
+	}
+
+	/**
+	 * put nodes in a same level into one same list
+	 * 
+	 * @param pointer
+	 * @return
+	 */
+	public ArrayList<List<Node>> LevelOrderWithLevelDetail(Node pointer) {
+		ArrayList<List<Node>> list = new ArrayList<List<Node>>();
+		LevelOrderWithLevelDetailHelper(list, root, 0);
+		return list;
+	}
+
+	public void LevelOrderWithLevelDetailHelper(ArrayList<List<Node>> list, Node pointer, int level) {
+		if (pointer == null) {
+			return;
+		}
+		if (list.size() == level) {
+			list.add(level, new ArrayList<Node>());
+		}
+		list.get(level).add(pointer);
+		LevelOrderWithLevelDetailHelper(list, pointer.left, level + 1);
+		LevelOrderWithLevelDetailHelper(list, pointer.right, level + 1);
+
 	}
 
 	/**
@@ -457,6 +481,31 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * check whether the binary tree is balanced
+	 * 
+	 * balanced: the heights of two subtrees of any node never differ by more
+	 * than one
+	 * 
+	 * @return
+	 */
+
+	public boolean isBalanced() {
+		return isBalancedHelper(this.root);
+	}
+
+	public boolean isBalancedHelper(Node pointer) {
+		if (pointer == null) {
+			return true;
+		}
+		int differ = Math.abs(this.getMaxHeight(pointer.left) - this.getMaxHeight(pointer.right));
+		if (differ > 1) {
+			return false;
+		} else {
+			return isBalancedHelper(pointer.left) && isBalancedHelper(pointer.right);
+		}
 	}
 
 	public Node invertTree(Node root) {
@@ -722,6 +771,16 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		tree.InOrderWithoutRecursive(tree.root);
 		System.out.println("----post-order without recursive--------");
 		tree.PostOrderWithOutRecursive(tree.root);
+		System.out.println("---- level-order traverse ------");
+		tree.LevelOrderTraverse(tree.root);
+		System.out.println("---- level-order with detail -----");
+		ArrayList listA = new ArrayList();
+		listA = tree.LevelOrderWithLevelDetail(tree.root);
+		for (int i = 0; i < listA.size(); i++) {
+			System.out.println(i + " th level:");
+			System.out.println(listA.get(i));
+		}
+
 		System.out.println("nodes number under root(including):" + tree.getNodesCount(tree.root));
 		int k = 2;
 		System.out.println("the nodes on the " + k + "th level:" + tree.getLevelNodesCount(k));
@@ -744,6 +803,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 				tree.getShortestPathBetweenTwoNodes(tree.root, tree.root.left.right, tree.root.right.right.right));
 		System.out.println(tree.countRange(2, 4));
 		System.out.println(tree.rank(1));
+		System.out.println("the tree is balanced:" + tree.isBalanced());
 
 	}
 
