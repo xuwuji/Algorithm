@@ -442,7 +442,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	 * For example, (root,2) represents check the nodes under root in two
 	 * levels. If the pointer is null,the it is a null node, then it should
 	 * return 0. If the k=0, it means it is already on the checking level, so it
-	 * should return 0.
+	 * should return 1.
 	 * 
 	 * @param pointer
 	 * @param k
@@ -541,34 +541,22 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 	 * @return
 	 */
 	public Node FindLowestAncestorInBT(Node root, Node p, Node q) {
-		if (root == null) {
-			return null;
-		}
-
-		if (p == root) {
-			return p;
-		}
-
-		if (q == root) {
-			return q;
+		if (root == null || p == root || q == root) {
+			return root;
 		}
 
 		Node left = FindLowestAncestorInBT(root.left, p, q);
 		Node right = FindLowestAncestorInBT(root.right, p, q);
 
-		if (left == null && right == null) {
-			return null;
+		if (left != null && right != null) {
+			return root;
+		} else {
+			if (left != null) {
+				return left;
+			} else {
+				return right;
+			}
 		}
-
-		if (left != null && right == null) {
-			return left;
-		}
-
-		if (right != null && left == null) {
-			return right;
-		}
-
-		return root;
 	}
 
 	/**
@@ -601,15 +589,9 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 			return false;
 		}
 
-		// System.out.println(root.toString());
-
 		sum = sum - Integer.valueOf(String.valueOf(root.key));
-		System.out.println(sum);
-		// System.out.println(root.right.toString());
-		if (root.left == null && root.right == null) {
-		}
+
 		if (sum == 0 && root.left == null && root.right == null) {
-			// System.out.println("yes" + root.toString());
 			return true;
 		}
 
@@ -783,13 +765,13 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 
 		System.out.println("nodes number under root(including):" + tree.getNodesCount(tree.root));
 		int k = 2;
-		System.out.println("the nodes on the " + k + "th level:" + tree.getLevelNodesCount(k));
-		System.out.println("this is a BST:" + tree.isBST());
+		System.out.println("the number of nodes on the " + k + "th level:" + tree.getLevelNodesCount(k));
+
 		// tree.invertTree(tree.root);
 		// tree.LevelOrderTraverse(tree.root);
 		// tree.getSymmetric(tree.root);
 		// tree.LevelOrderTraverse(tree.root);
-		System.out.println(tree.hasPathSum(tree.root, 18));
+		System.out.println("tree has path with the sum: " + tree.hasPathSum(tree.root, 18));
 		System.out.println("--------  all paths from root to leaves  ------");
 		List<String> list = tree.binaryTreePaths(tree.root);
 		for (String s : list) {
@@ -804,7 +786,7 @@ public class BinaryTree<Key extends Comparable<Key>, E> {
 		System.out.println(tree.countRange(2, 4));
 		System.out.println(tree.rank(1));
 		System.out.println("the tree is balanced:" + tree.isBalanced());
-
+		System.out.println("this is a BST:" + tree.isBST());
 	}
 
 }
