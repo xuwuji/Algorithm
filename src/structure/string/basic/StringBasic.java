@@ -2,6 +2,7 @@ package structure.string.basic;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
 public class StringBasic {
 
@@ -132,9 +133,108 @@ public class StringBasic {
 		return sb.toString();
 	}
 
+	/**
+	 * determine if each character in the string is unique,cannot use additional
+	 * data structure
+	 * 
+	 * 1.use a check array
+	 * 
+	 * 2.sort the string, and compare one character with its neighbor
+	 * 
+	 * ASCII ->1 bytes, 8 bits, 256
+	 * 
+	 * Unicode ->2 bytes, 16 bits, 65536
+	 * 
+	 * Here we assume the string is ASCII
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isUnique(String str) {
+		boolean[] check = new boolean[256];
+		for (int i = 0; i < str.length(); i++) {
+			int val = str.charAt(i);
+			if (check[val] == true) {
+				return false;
+			}
+			check[val] = true;
+		}
+		return true;
+	}
+
+	/**
+	 * check two string consists of same characters
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static boolean isAnagram(String a, String b) {
+		if (a.length() != b.length()) {
+			return false;
+		}
+		HashMap<Character, Integer> map = new HashMap();
+		// 1. count each character in first String
+		for (int i = 0; i < a.length(); i++) {
+			char c = a.charAt(i);
+			if (map.containsKey(c)) {
+				map.put(c, map.get(c) + 1);
+			} else {
+				map.put(c, 1);
+			}
+		}
+
+		// 2. compare the second string
+		for (int i = 0; i < b.length(); i++) {
+			char c = b.charAt(i);
+			if (map.containsKey(c)) {
+				map.put(c, map.get(c) - 1);
+			} else {
+				return false;
+			}
+		}
+
+		// 3. check the map
+		for (Entry<Character, Integer> entry : map.entrySet()) {
+			if (entry.getValue() != 0) {
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	/**
+	 * use array as check helper instead of hashMap above,assume the string is
+	 * ASCII
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static boolean isAnagram2(String a, String b) {
+		if (a.length() != b.length()) {
+			return false;
+		}
+		int[] check = new int[256];
+		for (int i = 0; i < a.length(); i++) {
+			int c = a.charAt(i);
+			check[c]++;
+		}
+		for (int i = 0; i < b.length(); i++) {
+			int c = b.charAt(i);
+			check[c]--;
+			if (check[c] < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static void main(String[] args) {
 		System.out.println(StringBasic.removeChars("i love you", "io"));
 		System.out.println(StringBasic.StringToInteger("100"));
 		System.out.println(StringBasic.IntegerToString(0));
+		System.out.println(StringBasic.isAnagram("abc", "bac"));
 	}
 }
