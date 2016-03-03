@@ -1,5 +1,7 @@
 package structure.array;
 
+import java.util.Collections;
+
 /**
  * In a linked list, lookup is always an O(n) operation, but array lookup is
  * O(1) as long as you know the index of the element you want.
@@ -75,7 +77,12 @@ public class Array {
 		return temp;
 	}
 
-	public static void pring2DMatrix(Object[][] matrix) {
+	/**
+	 * print a 2D matrix line by line
+	 * 
+	 * @param matrix
+	 */
+	public static void pring2DMatrixLineByLine(Object[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
 				System.out.print(matrix[i][j] + " ");
@@ -84,11 +91,20 @@ public class Array {
 		}
 	}
 
+	/**
+	 * print a 2D matrix from outside to inside
+	 * 
+	 * @param matrix
+	 */
+	public static void print2DMatrixSquare(Object[][] matrix) {
+
+	}
+
 	public static void main(String[] args) {
 		Object[][] matrix = new Object[][] { { 1, 2, 3, 11 }, { 4, 5, 6, 22 }, { 7, 8, 9, 44 } };
 		// Array.rotate2DArray(matrix, 3);
 		// Array.pring2DMatrix(matrix);
 		Object[][] temp = Array.rotate2DArray(matrix);
-		Array.pring2DMatrix(temp);
+		Array.pring2DMatrixLineByLine(temp);
 	}
 }
